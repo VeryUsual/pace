@@ -1,0 +1,148 @@
+[gd_scene format=3 uid="uid://326jvibowtcy"]
+
+[ext_resource type="Script" uid="uid://bse43lx0vdn8w" path="res://scripts/stats_scene.gd" id="1_my1ss"]
+
+[node name="StatsScene" type="Control" unique_id=2081700373]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_my1ss")
+
+[node name="ColorRect4" type="ColorRect" parent="." unique_id=129869848]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.06666667, 0.06666667, 0.105882354, 1)
+
+[node name="Label" type="Label" parent="." unique_id=1489026421]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 25.0
+offset_right = 377.0
+offset_bottom = 48.0
+text = "Today, you've logged 1 hour, 50 minutes."
+
+[node name="BackButton" type="Button" parent="." unique_id=550014231]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -79.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 44.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 20
+text = "< Back"
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1315044917]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 89.0
+offset_right = 207.0
+offset_bottom = 247.0
+color = Color(1, 1, 1, 0.18039216)
+
+[node name="Label" type="Label" parent="ColorRect" unique_id=1148406002]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -41.0
+offset_top = 8.0
+offset_right = 41.0
+offset_bottom = 31.0
+grow_horizontal = 2
+text = "Total Time"
+
+[node name="Label2" type="Label" parent="ColorRect" unique_id=73429112]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -41.0
+offset_top = 48.0
+offset_right = 41.0
+offset_bottom = 85.0
+grow_horizontal = 2
+text = "40h 20m"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorRect2" type="ColorRect" parent="." unique_id=1589164062]
+layout_mode = 0
+offset_left = 227.0
+offset_top = 89.0
+offset_right = 407.0
+offset_bottom = 247.0
+color = Color(1, 1, 1, 0.18039216)
+
+[node name="Label" type="Label" parent="ColorRect2" unique_id=323501465]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -41.0
+offset_top = 8.0
+offset_right = 41.0
+offset_bottom = 31.0
+grow_horizontal = 2
+text = "Current Streak"
+
+[node name="Label2" type="Label" parent="ColorRect2" unique_id=1576708193]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -41.0
+offset_top = 48.0
+offset_right = 41.0
+offset_bottom = 85.0
+grow_horizontal = 2
+text = "10 days"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorRect3" type="ColorRect" parent="." unique_id=727387505]
+layout_mode = 0
+offset_left = 427.0
+offset_top = 89.0
+offset_right = 607.0
+offset_bottom = 247.0
+color = Color(1, 1, 1, 0.18039216)
+
+[node name="Label" type="Label" parent="ColorRect3" unique_id=2098670438]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -41.0
+offset_top = 8.0
+offset_right = 41.0
+offset_bottom = 31.0
+grow_horizontal = 2
+text = "#1 Day"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="ColorRect3" unique_id=917623957]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -41.0
+offset_top = 48.0
+offset_right = 41.0
+offset_bottom = 85.0
+grow_horizontal = 2
+text = "01/01/2026"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

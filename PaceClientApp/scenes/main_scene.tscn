@@ -21,7 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Clock" type="Sprite2D" parent="." unique_id=167174898]
-position = Vector2(578, 208)
+position = Vector2(578, 176)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_w2twt")
 
@@ -33,9 +33,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -131.5
-offset_top = 42.0
+offset_top = 10.0
 offset_right = 131.5
-offset_bottom = 152.0
+offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -52,23 +52,41 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -102.5
-offset_top = -130.0
+offset_top = -162.0
 offset_right = 102.5
+offset_bottom = -32.0
 grow_horizontal = 2
 grow_vertical = 0
 
 [node name="StartButton" type="Button" parent="VBoxContainer" unique_id=862098796]
 layout_mode = 2
+theme_override_font_sizes/font_size = 22
 text = "Start"
 
 [node name="PauseButton" type="Button" parent="VBoxContainer" unique_id=7079899]
 layout_mode = 2
+theme_override_font_sizes/font_size = 22
 text = "Pause"
 
 [node name="StopButton" type="Button" parent="VBoxContainer" unique_id=1056803361]
 layout_mode = 2
+theme_override_font_sizes/font_size = 22
 text = "Stop"
+
+[node name="StatsButton" type="Button" parent="." unique_id=2090399809]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -202.0
+offset_top = 23.0
+offset_right = -23.0
+offset_bottom = 84.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 34
+text = "Stats"
 
 [connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/PauseButton" to="." method="_on_pause_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/StopButton" to="." method="_on_stop_button_pressed"]
+[connection signal="pressed" from="StatsButton" to="." method="_on_stats_button_pressed"]

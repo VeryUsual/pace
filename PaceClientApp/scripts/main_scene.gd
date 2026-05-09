@@ -60,3 +60,6 @@ func _on_stop_button_pressed() -> void:
 	$TimeLabel.text = format_time(time)
 	
 	get_tree().change_scene_to_file("res://scenes/upload_scene.tscn")
+
+func _on_stats_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/stats_scene.tscn")
