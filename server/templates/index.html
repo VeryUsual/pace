@@ -1,1 +1,17 @@
-<h1>Test</h1>
+<h1>Pace Dashboard</h1>
+
+<h3>Sessions:</h3>
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Length</th>
+    <th>Description</th>
+  </tr>
+  {{ range .sessions }}
+  <tr>
+    <td>{{.Session_id}}</td>
+    <td>{{.Length_minutes}}</td>
+    <td>{{.Description}}</td>
+  </tr>
+  {{end}}
+</table>

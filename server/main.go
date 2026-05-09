@@ -47,6 +47,12 @@ func main() {
 		username TEXT NOT NULL,
 		password TEXT NOT NULL
 	);
+	CREATE TABLE IF NOT EXISTS sessions (
+		session_id INTEGER PRIMARY KEY AUTOINCREMENT,
+		length_minutes INTEGER NOT NULL,
+		description TEXT NOT NULL,
+		user_id INTEGER NOT NULL
+	)
 	`)
 	if userstableerr != nil {
 		log.Fatal(userstableerr)
@@ -61,7 +67,31 @@ func main() {
 
 	basicauthrouter.GET("/dashboard", func(c *gin.Context) {
 		user := c.MustGet(gin.AuthUserKey).(string) // gets the user from the basicauthrouter middleware
-		c.HTML(http.StatusOK, "index.html", gin.H{"user": user,})
+		
+		type Session struct {
+			Session_id string
+			Length_minutes string
+			Description string
+			User_id string
+		}
+
+		rows, err := db.Query(`SELECT session_id, length_minutes, description, user_id FROM sessions`)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer rows.Close()
+
+		var sessions []Session
+
+		for rows.Next() {
+			var s Session
+			if err := rows.Scan(&s.Session_id, &s.Length_minutes, &s.Description, &s.User_id); err != nil {
+				log.Fatal(err)
+			}
+			sessions = append(sessions, s)
+		}
+
+		c.HTML(http.StatusOK, "index.html", gin.H{"user": user, "sessions": sessions,})
 	})
 	router.GET("/", func(c *gin.Context) {
 		var usercount int
@@ -91,6 +121,13 @@ func main() {
 		} else {
 			c.JSON(400, gin.H{"success": false, "message": "First_User_Already_Created"})
 		}
+	})
+	basicauthrouter.GET("/api/session/create", func(c *gin.Context) {
+		_, err := db.Exec(`INSERT INTO sessions (length_minutes, description, user_id) VALUES (?, ?, ?)`, c.Query("length"), c.Query("desc"), 1)
+		if err != nil {
+			log.Fatal(err)
+		}
+		c.JSON(200, gin.H{"success": true})
 	})
 	router.Run()
 }
