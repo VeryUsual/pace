@@ -1,0 +1,1 @@
+This folder contains the Pace Client Application for Linux, MacOS, Windows, and all other Operating Systems Godot supports.

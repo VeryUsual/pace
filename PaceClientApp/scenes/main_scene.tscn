@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://54qsjsibc2fg"]
+
+[ext_resource type="Script" uid="uid://bkwdph34sovpx" path="res://scripts/main_scene.gd" id="1_pw63i"]
+[ext_resource type="Texture2D" uid="uid://tupfkturo5xg" path="res://assets/clock.jpg" id="1_w2twt"]
+
+[node name="MainScene" type="Control" unique_id=1146395196]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pw63i")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=135787601]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Clock" type="Sprite2D" parent="." unique_id=167174898]
+position = Vector2(578, 208)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_w2twt")
+
+[node name="TimeLabel" type="Label" parent="." unique_id=16132698]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -131.5
+offset_top = 42.0
+offset_right = 131.5
+offset_bottom = 152.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 80
+text = "0:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=321482072]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -102.5
+offset_top = -130.0
+offset_right = 102.5
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="StartButton" type="Button" parent="VBoxContainer" unique_id=862098796]
+layout_mode = 2
+text = "Start"
+
+[node name="PauseButton" type="Button" parent="VBoxContainer" unique_id=7079899]
+layout_mode = 2
+text = "Pause"
+
+[node name="StopButton" type="Button" parent="VBoxContainer" unique_id=1056803361]
+layout_mode = 2
+text = "Stop"
+
+[connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/PauseButton" to="." method="_on_pause_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/StopButton" to="." method="_on_stop_button_pressed"]
