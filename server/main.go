@@ -4,6 +4,9 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	_ "modernc.org/sqlite" // pure go sqlite library because c is annoying
@@ -51,13 +54,21 @@ func main() {
 		session_id INTEGER PRIMARY KEY AUTOINCREMENT,
 		length_minutes INTEGER NOT NULL,
 		description TEXT NOT NULL,
-		user_id INTEGER NOT NULL
+		user_id INTEGER NOT NULL,
+		datetime TEXT NOT NULL DEFAULT (datetime('now'))
 	)
 	`)
 	if userstableerr != nil {
 		log.Fatal(userstableerr)
 	}
 
+	type Session struct {
+		Session_id string
+		Length_minutes string
+		Description string
+		User_id string
+		Datetime string
+	}
 
 	router := gin.Default()
 
@@ -67,15 +78,8 @@ func main() {
 
 	basicauthrouter.GET("/dashboard", func(c *gin.Context) {
 		user := c.MustGet(gin.AuthUserKey).(string) // gets the user from the basicauthrouter middleware
-		
-		type Session struct {
-			Session_id string
-			Length_minutes string
-			Description string
-			User_id string
-		}
-
-		rows, err := db.Query(`SELECT session_id, length_minutes, description, user_id FROM sessions`)
+			
+		rows, err := db.Query(`SELECT session_id, length_minutes, description, user_id, datetime FROM sessions`)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -85,13 +89,24 @@ func main() {
 
 		for rows.Next() {
 			var s Session
-			if err := rows.Scan(&s.Session_id, &s.Length_minutes, &s.Description, &s.User_id); err != nil {
+			if err := rows.Scan(&s.Session_id, &s.Length_minutes, &s.Description, &s.User_id, &s.Datetime); err != nil {
 				log.Fatal(err)
 			}
 			sessions = append(sessions, s)
 		}
 
-		c.HTML(http.StatusOK, "index.html", gin.H{"user": user, "sessions": sessions,})
+		today := time.Now().Format("2006-01-02")
+		var todaySessions []Session
+		var totalTimeToday int = 0
+		for _, session := range sessions {
+			if strings.HasPrefix(session.Datetime, today) {
+				todaySessions = append(todaySessions, session)
+				l, _ := strconv.Atoi(session.Length_minutes)
+				totalTimeToday += l
+			}
+		}
+
+		c.HTML(http.StatusOK, "index.html", gin.H{"user": user, "sessions": sessions, "totalTimeToday": totalTimeToday})
 	})
 	router.GET("/", func(c *gin.Context) {
 		var usercount int
@@ -123,11 +138,31 @@ func main() {
 		}
 	})
 	basicauthrouter.GET("/api/session/create", func(c *gin.Context) {
-		_, err := db.Exec(`INSERT INTO sessions (length_minutes, description, user_id) VALUES (?, ?, ?)`, c.Query("length"), c.Query("desc"), 1)
+		var user_id int
+		db.QueryRow(`SELECT user_id FROM users WHERE username = ?`, gin.AuthUserKey,).Scan(&user_id)
+		_, err := db.Exec(`INSERT INTO sessions (length_minutes, description, user_id) VALUES (?, ?, ?)`, c.Query("length"), c.Query("desc"), user_id)
 		if err != nil {
 			log.Fatal(err)
 		}
 		c.JSON(200, gin.H{"success": true})
+	})
+	basicauthrouter.GET("/api/sessions", func(c *gin.Context) {
+		rows, err := db.Query(`SELECT session_id, length_minutes, description, user_id, datetime FROM sessions`)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer rows.Close()
+
+		var sessions []Session
+
+		for rows.Next() {
+			var s Session
+			if err := rows.Scan(&s.Session_id, &s.Length_minutes, &s.Description, &s.User_id, &s.Datetime); err != nil {
+				log.Fatal(err)
+			}
+			sessions = append(sessions, s)
+		}
+		c.JSON(200, gin.H{"sessions": sessions})
 	})
 	router.Run()
 }
