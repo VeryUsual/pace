@@ -48,7 +48,8 @@ func main() {
 	CREATE TABLE IF NOT EXISTS users (
 		user_id INTEGER PRIMARY KEY AUTOINCREMENT,
 		username TEXT NOT NULL,
-		password TEXT NOT NULL
+		password TEXT NOT NULL,
+		gold_amount INTEGER NOT NULL DEFAULT 0
 	);
 	CREATE TABLE IF NOT EXISTS sessions (
 		session_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -56,7 +57,14 @@ func main() {
 		description TEXT NOT NULL,
 		user_id INTEGER NOT NULL,
 		datetime TEXT NOT NULL DEFAULT (datetime('now'))
-	)
+	);
+	CREATE TABLE IF NOT EXISTS purchases (
+		purchase_id INTEGER PRIMARY KEY AUTOINCREMENT,
+		item TEXT NOT NULL,
+		user_id INTEGER NOT NULL,
+		price INTEGER NOT NULL,
+		when_purchased TEXT NOT NULL DEFAULT (datetime('now'))
+	);
 	`)
 	if userstableerr != nil {
 		log.Fatal(userstableerr)
@@ -68,6 +76,14 @@ func main() {
 		Description string
 		User_id string
 		Datetime string
+	}
+
+	type Purchase struct {
+		Purchase_id string
+		Item string
+		User_id string
+		Price string
+		When_purchased string
 	}
 
 	router := gin.Default()
@@ -138,8 +154,9 @@ func main() {
 		}
 	})
 	basicauthrouter.GET("/api/session/create", func(c *gin.Context) {
+		user := c.MustGet(gin.AuthUserKey).(string) 
 		var user_id int
-		db.QueryRow(`SELECT user_id FROM users WHERE username = ?`, gin.AuthUserKey,).Scan(&user_id)
+		db.QueryRow(`SELECT user_id FROM users WHERE username = ?`, user,).Scan(&user_id)
 		_, err := db.Exec(`INSERT INTO sessions (length_minutes, description, user_id) VALUES (?, ?, ?)`, c.Query("length"), c.Query("desc"), user_id)
 		if err != nil {
 			log.Fatal(err)
@@ -164,5 +181,65 @@ func main() {
 		}
 		c.JSON(200, gin.H{"sessions": sessions})
 	})
+	basicauthrouter.GET("/api/gold", func(c *gin.Context) {
+		user := c.MustGet(gin.AuthUserKey).(string) 
+		var goldAmount int
+		err := db.QueryRow(`SELECT gold_amount FROM users WHERE username = ?`, user,).Scan(&goldAmount)
+		if err != nil {
+			log.Fatal(err)
+		}		
+		c.JSON(200, gin.H{"gold_amount": goldAmount})
+	})
+	basicauthrouter.GET("/api/gold/add", func (c *gin.Context)  {
+		user := c.MustGet(gin.AuthUserKey).(string)
+		_, err := db.Exec(`UPDATE users SET gold_amount = gold_amount + ? WHERE username = ?;`, c.Query("amount"), user)
+		if err != nil {
+			log.Fatal(err)
+		}
+		c.JSON(200, gin.H{"success": true})
+	})
+	basicauthrouter.GET("/api/purchase", func(c *gin.Context) {
+		user := c.MustGet(gin.AuthUserKey).(string)
+		var user_id int
+		db.QueryRow(`SELECT user_id FROM users WHERE username = ?`, user,).Scan(&user_id)
+		var original_gold_amount int
+		db.QueryRow(`SELECT gold_amount FROM users WHERE username = ?`, user,).Scan(&original_gold_amount)
+		
+		price, _ := strconv.Atoi(c.Query("price"))
+
+		if original_gold_amount < price {
+			c.JSON(400, gin.H{"success": false, "error": "Insufficient_Balance"})
+			return
+		}
+
+		_, err := db.Exec(`UPDATE users SET gold_amount = gold_amount - ? WHERE username = ?;`, c.Query("price"), user)
+		if err != nil {
+			log.Fatal(err)
+		}
+		_, err2 := db.Exec(`INSERT INTO purchases (item, price, user_id) VALUES (?, ?, ?)`, c.Query("item"), price, user_id)
+		if err2 != nil {
+			log.Fatal(err)
+		}
+		c.JSON(200, gin.H{"success": true})
+	})
+	basicauthrouter.GET("/api/purchases", func(c *gin.Context) {
+		rows, err := db.Query(`SELECT purchase_id, item, user_id, price, when_purchased FROM purchases`)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer rows.Close()
+
+		var purchases []Purchase
+
+		for rows.Next() {
+			var p Purchase
+			if err := rows.Scan(&p.Purchase_id, &p.Item, &p.User_id, &p.Price, &p.When_purchased); err != nil {
+				log.Fatal(err)
+			}
+			purchases = append(purchases, p)
+		}
+		c.JSON(200, gin.H{"purchases": purchases})
+	})
+
 	router.Run()
 }
