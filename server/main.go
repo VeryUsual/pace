@@ -136,6 +136,18 @@ func main() {
 			c.Redirect(http.StatusFound, "/dashboard")
 		}
 	})
+	router.GET("/api/users", func(c *gin.Context) {
+		var usercount int
+		err := db.QueryRowContext(c, "SELECT COUNT(*) FROM users").Scan(&usercount)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if usercount == 0 {
+			c.JSON(400, gin.H{"users": false})
+		} else {
+			c.JSON(200, gin.H{"users": true})
+		}
+	})
 	router.POST("/createfirstuser", func(c *gin.Context) {
 		var usercount int
 		err := db.QueryRowContext(c, "SELECT COUNT(*) FROM users").Scan(&usercount)

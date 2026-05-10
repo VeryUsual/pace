@@ -10,6 +10,9 @@ var time_ticking: bool = false
 var state = "before_start"
 
 func _ready() -> void:
+	if get_window().size != Vector2i(1152, 648):
+		print("Wrong window size")
+	
 	var config = ConfigFile.new()
 	var error = config.load("user://serverconfig.cfg.pace")
 	if error == OK:
@@ -117,4 +120,4 @@ func _on_login_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/login_scene.tscn")
 
 func _on_me_button_pressed() -> void:
-	pass # Replace with function body.
+	get_tree().change_scene_to_file("res://scenes/me_scene.tscn")
