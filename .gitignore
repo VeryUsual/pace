@@ -1,1 +1,3 @@
 server/pacedatabase.db
+PaceClientApp/builds/*
+server/main.exe
