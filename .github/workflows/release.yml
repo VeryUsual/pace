@@ -41,8 +41,8 @@ jobs:
           GOARCH: amd64
         run: |
           cd server
-          mkdir -p dist
-          go build -o dist/pace-${{ matrix.goos }}-amd64${{ matrix.ext }} ./main.go
+          mkdir -p ../dist
+          go build -o ../dist/pace-${{ matrix.goos }}-amd64${{ matrix.ext }} ./main.go
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
