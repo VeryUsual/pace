@@ -6,7 +6,7 @@ A gamified application that tracks time and gives you gamified rewards.
 
 | <img src="screenshots/screenshot1.png" alt="screenshot" width="420"/> | <img src="screenshots/screenshot3.png" alt="screenshot" width="420"/> |
 | :-------------------------------------------------------------------: | :-------------------------------------------------------------------: |
-| <img src="screenshots/screenshot2.png" alt="screenshot" width="420"/> | <img src="screenshots/screenshot1.png" alt="screenshot" width="420"/> |
+| <img src="screenshots/screenshot2.png" alt="screenshot" width="420"/> | <img src="screenshots/screenshot4.png" alt="screenshot" width="420"/> |
 
 </div>
 
