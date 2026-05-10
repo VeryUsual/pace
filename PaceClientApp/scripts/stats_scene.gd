@@ -69,7 +69,8 @@ func _on_api_get_sessions_completed(result, response_code, headers, body):
 		var streak = 0
 		while true:
 			for session in sessions:
-				if session["Datetime"].begins_with(today_formatted):
+				var dt = Time.get_datetime_dict_from_unix_time(unix_time)
+				if session["Datetime"].begins_with("%04d-%02d-%02d" % [dt["year"], dt["month"], dt["day"]]):
 					unix_time -= 86400
 					streak += 1
 					continue
@@ -107,12 +108,13 @@ func _on_api_get_sessions_completed(result, response_code, headers, body):
 		if total != 0:
 			var sessionspercentagebycategories: Dictionary[String, float] = {}
 			for session in sessionstotalbycategories:
-				if float(int(sessionstotalbycategories[session]) / total) != 0.0:
-					sessionspercentagebycategories[session] = float(int(sessionstotalbycategories[session]) / total) * 100.0
+				if float(float(sessionstotalbycategories[session]) / float(total)) != 0.0:
+					sessionspercentagebycategories[session] = float(float(sessionstotalbycategories[session]) / float(total)) * 100.0
 			
 			print(sessionspercentagebycategories)
 			
-			$CategoriesPieChart.set_new_data(sessionspercentagebycategories)
+			if sessionspercentagebycategories != {}:
+				$CategoriesPieChart.set_new_data(sessionspercentagebycategories)
 		else:
 			$CategoriesPieChart.visible = false
 	else:

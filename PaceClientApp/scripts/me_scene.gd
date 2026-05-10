@@ -119,4 +119,4 @@ func _reload(result, response_code, headers, body):
 		reload()
 
 func reload():
-	print()
+	_ready()
