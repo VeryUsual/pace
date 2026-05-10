@@ -37,7 +37,6 @@ func _on_api_get_sessions_completed(result, response_code, headers, body):
 	if response_code == 200:
 		var json = JSON.new()
 		if json.parse_string(body.get_string_from_utf8())["sessions"] != null:
-			print(body.get_string_from_utf8())
 			sessions = json.parse_string(body.get_string_from_utf8())["sessions"]
 			
 			var time_logs = []

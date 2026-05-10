@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://326jvibowtcy"]
 
 [ext_resource type="Script" uid="uid://bse43lx0vdn8w" path="res://scripts/stats_scene.gd" id="1_my1ss"]
+[ext_resource type="Script" uid="uid://5dq6qjpyy13w" path="res://scripts/pie_chart.gd" id="2_wmwr8"]
 
 [node name="StatsScene" type="Control" unique_id=2081700373]
 layout_mode = 3
@@ -249,6 +250,18 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 21
 text = "Settings"
+
+[node name="CategoriesPieChart" type="Control" parent="." unique_id=1916514090]
+anchors_preset = 0
+offset_left = 848.0
+offset_top = 168.0
+offset_right = 1095.0
+offset_bottom = 325.0
+script = ExtResource("2_wmwr8")
+elements = Dictionary[String, float]({
+"Loading": 99.0
+})
+metadata/_custom_type_script = "uid://5dq6qjpyy13w"
 
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="pressed" from="ExportButton" to="." method="_on_export_button_pressed"]

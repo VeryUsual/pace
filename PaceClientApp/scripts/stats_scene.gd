@@ -87,6 +87,34 @@ func _on_api_get_sessions_completed(result, response_code, headers, body):
 		$GoalProgressBar.value = time_logged_today
 		$GoalProgressBar.max_value = Globals.goal_per_day
 		$GoalLabel.text = "You have done " + str((time_logged_today/Globals.goal_per_day)*100) + "% of your goal of " + str(Globals.goal_per_day) + " minutes!"
+		
+		
+		var sessionstotalbycategories = {}
+		for session in sessions:
+			if session["Category"] in sessionstotalbycategories:
+				sessionstotalbycategories[session["Category"]] += int(session["Length_minutes"])
+			else:
+				sessionstotalbycategories[session["Category"]] = int(session["Length_minutes"])
+		
+		print(sessionstotalbycategories)
+		
+		var total = 0
+		for s in sessionstotalbycategories.values():
+			total += s
+		
+		print($CategoriesPieChart.elements)
+		
+		if total != 0:
+			var sessionspercentagebycategories: Dictionary[String, float] = {}
+			for session in sessionstotalbycategories:
+				if float(int(sessionstotalbycategories[session]) / total) != 0.0:
+					sessionspercentagebycategories[session] = float(int(sessionstotalbycategories[session]) / total) * 100.0
+			
+			print(sessionspercentagebycategories)
+			
+			$CategoriesPieChart.set_new_data(sessionspercentagebycategories)
+		else:
+			$CategoriesPieChart.visible = false
 	else:
 		$Label.text = "No data! Start by recording a session!"
 		$GoalLabel.text = "No data! Start by recording a session!"
