@@ -1,8 +1,40 @@
 extends Control
 
+var pace_server
+var pace_username
+var pace_password
+var sessions: Array
+
 var time: float = 0.0
 var time_ticking: bool = false
 var state = "before_start"
+
+func _ready() -> void:
+	var config = ConfigFile.new()
+	var error = config.load("user://serverconfig.cfg.pace")
+	if error == OK:
+		pace_server = config.get_value("serverconfig", "paceserver")
+		pace_username = config.get_value("serverconfig", "paceusername")
+		pace_password = config.get_value("serverconfig", "pacepassword")
+		var http_req = HTTPRequest.new()
+		add_child(http_req)
+		http_req.connect("request_completed", _on_api_get_sessions_completed)
+		var auth=str("Basic ", Marshalls.utf8_to_base64(str(pace_username, ":", pace_password))) 
+		var headers=["Content-Type: application/json","Authorization: "+auth]
+		http_req.request(pace_server + "/api/sessions", headers)
+
+func _on_api_get_sessions_completed(result, response_code, headers, body):
+	var json = JSON.new()
+	sessions = json.parse_string(body.get_string_from_utf8())["sessions"]
+	
+	var time_logs = []
+	var total_time_logged = 0
+	
+	for session in sessions:
+		time_logs.append(int(session["Length_minutes"]))
+		total_time_logged += int(session["Length_minutes"])
+	
+	$LvlLabel.text = "Lvl " + str(round((total_time_logged + len(time_logs))/100))
 
 func format_time(t: float) -> String:
 	var hours = int(t / 3600.0)
@@ -23,22 +55,22 @@ func format_time(t: float) -> String:
 func _process(delta: float) -> void:
 	if time_ticking:
 		time += delta
-		$TimeLabel.text = format_time(time)
+		$Control/TimeLabel.text = format_time(time)
 	
 	if state == "before_start":
-		$VBoxContainer/StartButton.visible = true
-		$VBoxContainer/PauseButton.visible = false
-		$VBoxContainer/StopButton.visible = false
+		$Control/VBoxContainer/StartButton.visible = true
+		$Control/VBoxContainer/PauseButton.visible = false
+		$Control/VBoxContainer/StopButton.visible = false
 	
 	if state == "started":
-		$VBoxContainer/StartButton.visible = false
-		$VBoxContainer/PauseButton.visible = true
-		$VBoxContainer/StopButton.visible = true
+		$Control/VBoxContainer/StartButton.visible = false
+		$Control/VBoxContainer/PauseButton.visible = true
+		$Control/VBoxContainer/StopButton.visible = true
 		
 		if time_ticking:
-			$VBoxContainer/PauseButton.text = "Pause"
+			$Control/VBoxContainer/PauseButton.text = "Pause"
 		else:
-			$VBoxContainer/PauseButton.text = "Unpause"
+			$Control/VBoxContainer/PauseButton.text = "Unpause"
 
 func _on_start_button_pressed() -> void:
 	time_ticking = true
@@ -47,17 +79,17 @@ func _on_start_button_pressed() -> void:
 func _on_pause_button_pressed() -> void:
 	if time_ticking:
 		time_ticking = false
-		$VBoxContainer/PauseButton.text = "Unpause"
+		$Control/VBoxContainer/PauseButton.text = "Unpause"
 	else:
 		time_ticking = true
-		$VBoxContainer/PauseButton.text = "Pause"
+		$Control/VBoxContainer/PauseButton.text = "Pause"
 
 func _on_stop_button_pressed() -> void:
 	Globals.time_length = round(time)
 	
 	time_ticking = false
 	time = 0
-	$TimeLabel.text = format_time(time)
+	$Control/TimeLabel.text = format_time(time)
 	
 	get_tree().change_scene_to_file("res://scenes/upload_scene.tscn")
 

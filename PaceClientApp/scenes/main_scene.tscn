@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bkwdph34sovpx" path="res://scripts/main_scene.gd" id="1_pw63i"]
 [ext_resource type="Texture2D" uid="uid://tupfkturo5xg" path="res://assets/clock.jpg" id="1_w2twt"]
+[ext_resource type="Texture2D" uid="uid://0ggv1haw0kpp" path="res://assets/level.png" id="3_7ykc4"]
 
 [node name="MainScene" type="Control" unique_id=1146395196]
 layout_mode = 3
@@ -20,12 +21,26 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Clock" type="Sprite2D" parent="." unique_id=167174898]
-position = Vector2(578, 176)
+[node name="Control" type="Control" parent="." unique_id=1036216440]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.5
+offset_top = -294.5
+offset_right = 140.5
+offset_bottom = 294.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Clock" type="Sprite2D" parent="Control" unique_id=167174898]
+position = Vector2(142.5, 146.5)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_w2twt")
 
-[node name="TimeLabel" type="Label" parent="." unique_id=16132698]
+[node name="TimeLabel" type="Label" parent="Control" unique_id=16132698]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -44,7 +59,7 @@ text = "0:00"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=321482072]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control" unique_id=321482072]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -52,23 +67,23 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -102.5
-offset_top = -162.0
+offset_top = -132.5
 offset_right = 102.5
-offset_bottom = -32.0
+offset_bottom = -2.5
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="StartButton" type="Button" parent="VBoxContainer" unique_id=862098796]
+[node name="StartButton" type="Button" parent="Control/VBoxContainer" unique_id=862098796]
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
 text = "Start"
 
-[node name="PauseButton" type="Button" parent="VBoxContainer" unique_id=7079899]
+[node name="PauseButton" type="Button" parent="Control/VBoxContainer" unique_id=7079899]
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
 text = "Pause"
 
-[node name="StopButton" type="Button" parent="VBoxContainer" unique_id=1056803361]
+[node name="StopButton" type="Button" parent="Control/VBoxContainer" unique_id=1056803361]
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
 text = "Stop"
@@ -86,7 +101,22 @@ grow_horizontal = 0
 theme_override_font_sizes/font_size = 34
 text = "Stats"
 
-[connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/PauseButton" to="." method="_on_pause_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/StopButton" to="." method="_on_stop_button_pressed"]
+[node name="Level" type="Sprite2D" parent="." unique_id=51491129]
+position = Vector2(39, 51)
+scale = Vector2(0.06700001, 0.06865214)
+texture = ExtResource("3_7ykc4")
+
+[node name="LvlLabel" type="Label" parent="." unique_id=274807890]
+layout_mode = 0
+offset_left = 75.0
+offset_top = 24.0
+offset_right = 197.0
+offset_bottom = 78.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+vertical_alignment = 1
+
+[connection signal="pressed" from="Control/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/PauseButton" to="." method="_on_pause_button_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/StopButton" to="." method="_on_stop_button_pressed"]
 [connection signal="pressed" from="StatsButton" to="." method="_on_stats_button_pressed"]
