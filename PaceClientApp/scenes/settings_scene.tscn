@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://cuvgkjtp62hq4"]
+
+[ext_resource type="Script" uid="uid://cbi3lps7rqhyf" path="res://scripts/settings_scene.gd" id="1_kqt80"]
+
+[node name="SettingsScene" type="Control" unique_id=2121185948]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kqt80")
+
+[node name="Panel" type="Panel" parent="." unique_id=2137373619]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=1686697559]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.5
+offset_top = -316.0
+offset_right = 240.5
+offset_bottom = 313.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="GoalPerDay" type="HBoxContainer" parent="Panel/VBoxContainer" unique_id=900529355]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer/GoalPerDay" unique_id=1891107948]
+layout_mode = 2
+text = "Goal per day: "
+
+[node name="LineEdit" type="LineEdit" parent="Panel/VBoxContainer/GoalPerDay" unique_id=566448884]
+layout_mode = 2
+context_menu_enabled = false
+emoji_menu_enabled = false
+
+[node name="SaveButton" type="Button" parent="Panel/VBoxContainer" unique_id=505628772]
+layout_mode = 2
+text = "Save & Quit"
+
+[connection signal="pressed" from="Panel/VBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]

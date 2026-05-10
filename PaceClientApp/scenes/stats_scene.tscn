@@ -28,6 +28,26 @@ offset_right = 377.0
 offset_bottom = 48.0
 text = "Today, you've logged 1 hour, 50 minutes."
 
+[node name="GoalProgressBar" type="ProgressBar" parent="." unique_id=1261530756]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 64.0
+offset_right = 830.0
+offset_bottom = 91.0
+max_value = 30.0
+value = 5.0
+rounded = true
+allow_greater = true
+allow_lesser = true
+
+[node name="GoalLabel" type="Label" parent="." unique_id=561504489]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 113.0
+offset_right = 823.0
+offset_bottom = 136.0
+text = "You have done 17% of your goal of 30 minutes!"
+
 [node name="BackButton" type="Button" parent="." unique_id=550014231]
 layout_mode = 1
 anchors_preset = 1
@@ -44,9 +64,9 @@ text = "< Back"
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1315044917]
 layout_mode = 0
 offset_left = 27.0
-offset_top = 89.0
+offset_top = 168.0
 offset_right = 207.0
-offset_bottom = 247.0
+offset_bottom = 326.0
 color = Color(1, 1, 1, 0.18039216)
 
 [node name="Label" type="Label" parent="ColorRect" unique_id=1148406002]
@@ -78,9 +98,9 @@ vertical_alignment = 1
 [node name="ColorRect2" type="ColorRect" parent="." unique_id=1589164062]
 layout_mode = 0
 offset_left = 221.0
-offset_top = 89.0
+offset_top = 168.0
 offset_right = 401.0
-offset_bottom = 247.0
+offset_bottom = 326.0
 color = Color(1, 1, 1, 0.18039216)
 
 [node name="Label" type="Label" parent="ColorRect2" unique_id=323501465]
@@ -112,9 +132,9 @@ vertical_alignment = 1
 [node name="ColorRect5" type="ColorRect" parent="." unique_id=1062383794]
 layout_mode = 0
 offset_left = 417.0
-offset_top = 89.0
+offset_top = 168.0
 offset_right = 625.0
-offset_bottom = 247.0
+offset_bottom = 326.0
 color = Color(1, 1, 1, 0.18039216)
 
 [node name="Label" type="Label" parent="ColorRect5" unique_id=97852227]
@@ -148,9 +168,9 @@ vertical_alignment = 1
 [node name="ColorRect6" type="ColorRect" parent="." unique_id=1541110496]
 layout_mode = 0
 offset_left = 639.0
-offset_top = 89.0
+offset_top = 168.0
 offset_right = 829.0
-offset_bottom = 247.0
+offset_bottom = 326.0
 color = Color(1, 1, 1, 0.18039216)
 
 [node name="Label" type="Label" parent="ColorRect6" unique_id=2127497331]
@@ -196,5 +216,40 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "Export Data"
 
+[node name="SearchSessionsLineEdit" type="LineEdit" parent="." unique_id=981596449]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 350.0
+offset_right = 350.0
+offset_bottom = 381.0
+placeholder_text = "Search..."
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=931129292]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 382.0
+offset_right = 828.0
+offset_bottom = 625.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=486964084]
+layout_mode = 2
+
+[node name="SettingsButton" type="Button" parent="." unique_id=1301769668]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -125.0
+offset_top = -113.0
+offset_right = -32.0
+offset_bottom = -72.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 21
+text = "Settings"
+
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="pressed" from="ExportButton" to="." method="_on_export_button_pressed"]
+[connection signal="pressed" from="SettingsButton" to="." method="_on_settings_button_pressed"]

@@ -67,7 +67,6 @@ func _on_api_get_sessions_completed(result, response_code, headers, body):
 	
 	var streak = 0
 	while true:
-		print(Time.get_date_string_from_unix_time(unix_time))
 		for session in sessions:
 			if session["Datetime"].begins_with(today_formatted):
 				unix_time -= 86400
@@ -75,6 +74,35 @@ func _on_api_get_sessions_completed(result, response_code, headers, body):
 				continue
 		break
 	$ColorRect2/Label2.text = str(streak) + " day(s)"
+	
+	var sessions_reversed = sessions
+	sessions_reversed.reverse()
+	
+	for session in sessions_reversed:
+		var label = Label.new()
+		label.text = session["Datetime"] + ": Did \"" + session["Description"] + "\" for " + session["Length_minutes"] + " minutes"
+		$ScrollContainer/VBoxContainer.add_child(label)
+	
+	$GoalProgressBar.value = time_logged_today
+	$GoalProgressBar.max_value = Globals.goal_per_day
+	$GoalLabel.text = "You have done " + str((time_logged_today/Globals.goal_per_day)*100) + "% of your goal of " + str(Globals.goal_per_day) + " minutes!"
+
+func _process(delta: float) -> void:
+	var sessions_reversed = sessions.duplicate()
+	sessions_reversed.reverse()
+	
+	for c in $ScrollContainer/VBoxContainer.get_children():
+		$ScrollContainer/VBoxContainer.remove_child(c)
+		c.queue_free()
+	
+	for session in sessions_reversed:
+		if $SearchSessionsLineEdit.text != "":
+			if $SearchSessionsLineEdit.text not in session["Datetime"] + ": Did \"" + session["Description"] + "\" for " + session["Length_minutes"] + " minutes":
+				continue
+		
+		var label = Label.new()
+		label.text = session["Datetime"] + ": Did \"" + session["Description"] + "\" for " + session["Length_minutes"] + " minutes"
+		$ScrollContainer/VBoxContainer.add_child(label)
 
 func _on_back_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/main_scene.tscn")
@@ -87,3 +115,6 @@ func _on_export_button_pressed() -> void:
 	await get_tree().create_timer(1.0).timeout
 	$ExportButton.disabled = false
 	$ExportButton.text = "Export Data"
+
+func _on_settings_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/settings_scene.tscn")
