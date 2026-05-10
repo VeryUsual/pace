@@ -40,6 +40,7 @@ jobs:
           GOOS: ${{ matrix.goos }}
           GOARCH: amd64
         run: |
+          cd server
           mkdir -p dist
           go build -o dist/pace-${{ matrix.goos }}-amd64${{ matrix.ext }} ./main.go
 
