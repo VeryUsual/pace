@@ -22,19 +22,36 @@ func _ready() -> void:
 		var auth=str("Basic ", Marshalls.utf8_to_base64(str(pace_username, ":", pace_password))) 
 		var headers=["Content-Type: application/json","Authorization: "+auth]
 		http_req.request(pace_server + "/api/sessions", headers)
+		
+		var http_req2 = HTTPRequest.new()
+		add_child(http_req2)
+		http_req2.connect("request_completed", _on_api_get_gold_completed)
+		http_req2.request(pace_server + "/api/gold", headers)
+		
+		$LoginButton.text = "Switch Account"
 
 func _on_api_get_sessions_completed(result, response_code, headers, body):
+	if response_code == 200:
+		var json = JSON.new()
+		if json.parse_string(body.get_string_from_utf8())["sessions"] != null:
+			print(body.get_string_from_utf8())
+			sessions = json.parse_string(body.get_string_from_utf8())["sessions"]
+			
+			var time_logs = []
+			var total_time_logged = 0
+			
+			for session in sessions:
+				time_logs.append(int(session["Length_minutes"]))
+				total_time_logged += int(session["Length_minutes"])
+			
+			$LvlLabel.text = "Lvl " + str(round((total_time_logged + len(time_logs))/100))
+	else:
+		$LvlLevel.text = str(response_code) + " response code from server"
+
+func _on_api_get_gold_completed(result, response_code, headers, body):
 	var json = JSON.new()
-	sessions = json.parse_string(body.get_string_from_utf8())["sessions"]
-	
-	var time_logs = []
-	var total_time_logged = 0
-	
-	for session in sessions:
-		time_logs.append(int(session["Length_minutes"]))
-		total_time_logged += int(session["Length_minutes"])
-	
-	$LvlLabel.text = "Lvl " + str(round((total_time_logged + len(time_logs))/100))
+	var gold_amount = int(json.parse_string(body.get_string_from_utf8())["gold_amount"])
+	$GoldLabel.text = str(gold_amount) + " gold"
 
 func format_time(t: float) -> String:
 	var hours = int(t / 3600.0)
@@ -95,3 +112,9 @@ func _on_stop_button_pressed() -> void:
 
 func _on_stats_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/stats_scene.tscn")
+
+func _on_login_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/login_scene.tscn")
+
+func _on_me_button_pressed() -> void:
+	pass # Replace with function body.

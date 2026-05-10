@@ -27,7 +27,11 @@ grow_vertical = 2
 
 [node name="DurationLabel" type="Label" parent="VBoxContainer" unique_id=1447163224]
 layout_mode = 2
-text = "Duration: 5 minutes"
+text = "Duration: x minutes"
+
+[node name="EarnedGoldLabel" type="Label" parent="VBoxContainer" unique_id=1762779821]
+layout_mode = 2
+text = "Earned x gold"
 
 [node name="PaceServerInput" type="LineEdit" parent="VBoxContainer" unique_id=813592218]
 layout_mode = 2

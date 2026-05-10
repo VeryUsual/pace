@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bkwdph34sovpx" path="res://scripts/main_scene.gd" id="1_pw63i"]
 [ext_resource type="Texture2D" uid="uid://tupfkturo5xg" path="res://assets/clock.jpg" id="1_w2twt"]
 [ext_resource type="Texture2D" uid="uid://0ggv1haw0kpp" path="res://assets/level.png" id="3_7ykc4"]
+[ext_resource type="Texture2D" uid="uid://ccc8evbipr7u7" path="res://assets/gold.png" id="4_pu3yx"]
 
 [node name="MainScene" type="Control" unique_id=1146395196]
 layout_mode = 3
@@ -116,7 +117,47 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
 vertical_alignment = 1
 
+[node name="Gold" type="Sprite2D" parent="." unique_id=1759804860]
+position = Vector2(38.000004, 110.00001)
+scale = Vector2(0.03, 0.03)
+texture = ExtResource("4_pu3yx")
+
+[node name="GoldLabel" type="Label" parent="." unique_id=1280593217]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 96.0
+offset_right = 171.0
+offset_bottom = 126.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+
+[node name="LoginButton" type="Button" parent="." unique_id=1807905445]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = -71.0
+offset_right = 145.0
+offset_bottom = -24.0
+grow_vertical = 0
+text = "Login"
+
+[node name="MeButton" type="Button" parent="." unique_id=1008329710]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -42.5
+offset_top = 16.0
+offset_right = 42.5
+offset_bottom = 47.0
+grow_horizontal = 2
+text = "Me"
+
 [connection signal="pressed" from="Control/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/PauseButton" to="." method="_on_pause_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/StopButton" to="." method="_on_stop_button_pressed"]
 [connection signal="pressed" from="StatsButton" to="." method="_on_stats_button_pressed"]
+[connection signal="pressed" from="LoginButton" to="." method="_on_login_button_pressed"]
+[connection signal="pressed" from="MeButton" to="." method="_on_me_button_pressed"]
