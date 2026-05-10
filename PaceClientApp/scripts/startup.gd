@@ -3,6 +3,8 @@ extends Control
 var pace_server = ""
 
 func _ready() -> void:
+	$ColorRect.visible = false
+	
 	var config = ConfigFile.new()
 	var error = config.load("user://serverconfig.cfg.pace")
 	if error == OK:
@@ -23,3 +25,9 @@ func _on_api_get_users_completed(result, response_code, headers, body):
 			get_tree().change_scene_to_file("res://scenes/login_scene.tscn")
 		else:
 			get_tree().change_scene_to_file("res://scenes/login_scene.tscn")
+
+func _on_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/login_scene.tscn")
+
+func _on_show_color_rect_timeout() -> void:
+	$ColorRect.visible = true

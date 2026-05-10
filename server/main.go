@@ -56,7 +56,8 @@ func main() {
 		length_minutes INTEGER NOT NULL,
 		description TEXT NOT NULL,
 		user_id INTEGER NOT NULL,
-		datetime TEXT NOT NULL DEFAULT (datetime('now'))
+		datetime TEXT NOT NULL DEFAULT (datetime('now')),
+		category TEXT NOT NULL
 	);
 	CREATE TABLE IF NOT EXISTS purchases (
 		purchase_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -76,6 +77,7 @@ func main() {
 		Description string
 		User_id string
 		Datetime string
+		Category string
 	}
 
 	type Purchase struct {
@@ -95,7 +97,7 @@ func main() {
 	basicauthrouter.GET("/dashboard", func(c *gin.Context) {
 		user := c.MustGet(gin.AuthUserKey).(string) // gets the user from the basicauthrouter middleware
 			
-		rows, err := db.Query(`SELECT session_id, length_minutes, description, user_id, datetime FROM sessions`)
+		rows, err := db.Query(`SELECT session_id, length_minutes, description, user_id, datetime, category FROM sessions`)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -105,7 +107,7 @@ func main() {
 
 		for rows.Next() {
 			var s Session
-			if err := rows.Scan(&s.Session_id, &s.Length_minutes, &s.Description, &s.User_id, &s.Datetime); err != nil {
+			if err := rows.Scan(&s.Session_id, &s.Length_minutes, &s.Description, &s.User_id, &s.Datetime, &s.Category); err != nil {
 				log.Fatal(err)
 			}
 			sessions = append(sessions, s)
@@ -169,14 +171,14 @@ func main() {
 		user := c.MustGet(gin.AuthUserKey).(string) 
 		var user_id int
 		db.QueryRow(`SELECT user_id FROM users WHERE username = ?`, user,).Scan(&user_id)
-		_, err := db.Exec(`INSERT INTO sessions (length_minutes, description, user_id) VALUES (?, ?, ?)`, c.Query("length"), c.Query("desc"), user_id)
+		_, err := db.Exec(`INSERT INTO sessions (length_minutes, description, category, user_id) VALUES (?, ?, ?, ?)`, c.Query("length"), c.Query("desc"), c.Query("category"), user_id)
 		if err != nil {
 			log.Fatal(err)
 		}
 		c.JSON(200, gin.H{"success": true})
 	})
 	basicauthrouter.GET("/api/sessions", func(c *gin.Context) {
-		rows, err := db.Query(`SELECT session_id, length_minutes, description, user_id, datetime FROM sessions`)
+		rows, err := db.Query(`SELECT session_id, length_minutes, description, user_id, datetime, category FROM sessions`)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -186,7 +188,7 @@ func main() {
 
 		for rows.Next() {
 			var s Session
-			if err := rows.Scan(&s.Session_id, &s.Length_minutes, &s.Description, &s.User_id, &s.Datetime); err != nil {
+			if err := rows.Scan(&s.Session_id, &s.Length_minutes, &s.Description, &s.User_id, &s.Datetime, &s.Category); err != nil {
 				log.Fatal(err)
 			}
 			sessions = append(sessions, s)

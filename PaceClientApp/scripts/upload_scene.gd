@@ -22,6 +22,14 @@ func _ready() -> void:
 		$VBoxContainer/PaceUsernameInput.text = config.get_value("serverconfig", "paceusername")
 		$VBoxContainer/PacePasswordInput.text = config.get_value("serverconfig", "pacepassword")
 
+func _process(delta: float) -> void:
+	if $VBoxContainer/CategoryOptionButton.get_selected() != -1:
+		var category = $VBoxContainer/CategoryOptionButton.get_item_text($VBoxContainer/CategoryOptionButton.get_selected())
+		if category == "Custom":
+			$VBoxContainer/CustomCategoryInput.visible = true
+		else:
+			$VBoxContainer/CustomCategoryInput.visible = false
+
 func _on_upload_button_pressed() -> void:
 	$VBoxContainer/UploadButton.disabled = true
 	var http_req = HTTPRequest.new()
@@ -31,7 +39,12 @@ func _on_upload_button_pressed() -> void:
 	var password = $VBoxContainer/PacePasswordInput.text
 	var auth=str("Basic ", Marshalls.utf8_to_base64(str(user, ":", password))) 
 	var headers=["Content-Type: application/json","Authorization: "+auth]
-	var error = http_req.request($VBoxContainer/PaceServerInput.text + "/api/session/create?length=" + str(int(round(Globals.time_length/60))) + "&desc=" + $VBoxContainer/SessionDescInput.text.uri_encode(), headers)
+	
+	var category = $VBoxContainer/CategoryOptionButton.get_item_text($VBoxContainer/CategoryOptionButton.get_selected())
+	if category == "Custom":
+		category = $VBoxContainer/CustomCategoryInput.text
+	
+	var error = http_req.request($VBoxContainer/PaceServerInput.text + "/api/session/create?length=" + str(int(round(Globals.time_length/60))) + "&desc=" + $VBoxContainer/SessionDescInput.text.uri_encode() + "&category=" + category.uri_encode(), headers)
 	
 func _on_upload_completed(result, response_code, headers, body):
 	if response_code == 200:

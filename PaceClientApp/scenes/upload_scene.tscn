@@ -50,6 +50,24 @@ secret = true
 layout_mode = 2
 placeholder_text = "Session Description"
 
+[node name="CategoryOptionButton" type="OptionButton" parent="VBoxContainer" unique_id=497962517]
+layout_mode = 2
+item_count = 5
+popup/item_0/text = "Custom"
+popup/item_0/id = 0
+popup/item_1/text = "Working"
+popup/item_1/id = 1
+popup/item_2/text = "Learning"
+popup/item_2/id = 2
+popup/item_3/text = "Emailing"
+popup/item_3/id = 3
+popup/item_4/text = "Planning"
+popup/item_4/id = 4
+
+[node name="CustomCategoryInput" type="LineEdit" parent="VBoxContainer" unique_id=2113127636]
+layout_mode = 2
+placeholder_text = "Category"
+
 [node name="UploadButton" type="Button" parent="VBoxContainer" unique_id=2088172413]
 layout_mode = 2
 text = "Upload"

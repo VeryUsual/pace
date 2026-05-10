@@ -81,7 +81,7 @@ func _on_api_get_sessions_completed(result, response_code, headers, body):
 		
 		for session in sessions_reversed:
 			var label = Label.new()
-			label.text = session["Datetime"] + ": Did \"" + session["Description"] + "\" for " + session["Length_minutes"] + " minutes"
+			label.text = session["Datetime"] + ": Did \"" + session["Description"] + "\" (Category: " + session["Category"] + ") for " + session["Length_minutes"] + " minutes"
 			$ScrollContainer/VBoxContainer.add_child(label)
 		
 		$GoalProgressBar.value = time_logged_today
@@ -109,11 +109,14 @@ func _process(delta: float) -> void:
 	
 	for session in sessions_reversed:
 		if $SearchSessionsLineEdit.text != "":
-			if $SearchSessionsLineEdit.text not in session["Datetime"] + ": Did \"" + session["Description"] + "\" for " + session["Length_minutes"] + " minutes":
+			if $SearchSessionsLineEdit.text not in session["Datetime"] + ": Did \"" + session["Description"] + "\" (Category: " + session["Category"] + ") for " + session["Length_minutes"] + " minutes":
 				continue
 		
 		var label = Label.new()
-		label.text = session["Datetime"] + ": Did \"" + session["Description"] + "\" for " + session["Length_minutes"] + " minutes"
+		var categorypart = " (Category: " + session["Category"] + ") "
+		if session["Category"] == "":
+			categorypart = ""
+		label.text = session["Datetime"] + ": Did \"" + session["Description"] + "\"" + categorypart +  " for " + session["Length_minutes"] + " minutes"
 		$ScrollContainer/VBoxContainer.add_child(label)
 
 func _on_back_button_pressed() -> void:

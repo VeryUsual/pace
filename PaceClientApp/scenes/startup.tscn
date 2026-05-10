@@ -10,3 +10,56 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_t87yh")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=619740520]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -202.0
+offset_top = -126.5
+offset_right = 202.0
+offset_bottom = 126.5
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="ColorRect" unique_id=258191698]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -194.0
+offset_top = -56.5
+offset_right = 194.0
+offset_bottom = -7.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "If you're seeing this, this means we can't reach your server! Make sure it's started."
+autowrap_mode = 3
+
+[node name="Button" type="Button" parent="ColorRect" unique_id=769201722]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -97.5
+offset_top = 16.5
+offset_right = 97.5
+offset_bottom = 47.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Switch servers/accounts"
+
+[node name="ShowColorRect" type="Timer" parent="." unique_id=1593698955]
+wait_time = 1.5
+autostart = true
+
+[connection signal="pressed" from="ColorRect/Button" to="." method="_on_button_pressed"]
+[connection signal="timeout" from="ShowColorRect" to="." method="_on_show_color_rect_timeout"]
