@@ -7,4 +7,4 @@ func _ready() -> void:
 func _on_save_button_pressed() -> void:
 	if int($Panel/VBoxContainer/GoalPerDay/LineEdit.text):
 		Globals.goal_per_day = int($Panel/VBoxContainer/GoalPerDay/LineEdit.text)
-		get_tree().change_scene_to_file("res://scenes/main_scene.tscn")
+		get_tree().change_scene_to_file("res://scenes/stats_scene.tscn")
